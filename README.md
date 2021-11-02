@@ -5,4 +5,5 @@
 4. MySQL - MySQLdb
 5. e-mail - SMTP (send), IMAP (receive), MIME (body)
 6. Excel Workbook - openpyxl
-7. 
+7. Asynchronous - asyncio, websockets
+8. Deep Learning - train, predict: darknet 
