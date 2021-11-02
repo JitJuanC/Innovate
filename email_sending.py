@@ -36,4 +36,4 @@ if __name__=='__main__':
     ---Write Text Here---
     """)
 
-    send_email(["dbsgraymatics@gmail.com", "dbs@graymatics.com", "jovy@mirobotic.sg"], text, datetime.now())
+    send_email(["dbsgraymatics@gmail.com", "dbs@graymatics.com"], text, datetime.now())
