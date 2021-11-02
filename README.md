@@ -1,2 +1,8 @@
-# gray-innovate
-Not innovative to the majority of Software developers but it is in my Software Engineering journey :)
+# List of work done (Continuously adding)
+1. Docker
+2. OpenCV
+3. Flask
+4. MySQL - MySQLdb
+5. e-mail - SMTP (send), IMAP (receive), MIME (body)
+6. Excel Workbook - openpyxl
+7. 
