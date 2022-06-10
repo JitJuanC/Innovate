@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yolo-deployment
+  namespace: graymatics
+  labels:
+    app: yolo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: yolo
+  template:
+    metadata:
+      labels:
+        app: yolo
+    spec:
+      containers:
+        - name: yolo
+          image: graymatics1/yolov4
+          workingDir: /home/src/server
+          command: ["/bin/sh"]
+          args: ["run.sh"]
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+          ports:
+            - containerPort: 5631
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: yolo-service
+  namespace: graymatics
+spec:
+  selector:
+    app: yolo
+  ports:
+    - protocol: TCP
+      port: 5631
+      targetPort: 5631

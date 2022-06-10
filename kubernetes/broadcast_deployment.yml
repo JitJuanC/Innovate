@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: broadcast-deployment
+  labels:
+    app: broadcast
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: broadcast
+  template:
+    metadata:
+      labels:
+        app: broadcast
+    spec:
+      containers:
+      - name: broadcast
+        image: graymatics1/broadcast:auto
+        resources:
+          limits: 
+            memory: 128Mi
+            cpu: 250m
+        ports:
+        - containerPort: 8090
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: broadcast-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: broadcast
+  ports:
+    - protocol: TCP
+      port: 8090
+      targetPort: 8090
+      nodePort: 31234

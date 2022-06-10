@@ -1,0 +1,62 @@
+version: "2.3"
+
+networks:
+  dev:
+    external: true
+
+services:
+  # Database
+  db:
+    image: mysql:5.7
+    volumes:
+      - /home/ubuntu/server/mysql:/var/lib/mysql
+      - /home/ubuntu/graymatics_init_tables.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
+    networks: 
+       - dev
+    environment:
+      MYSQL_ROOT_PASSWORD: MultiTenant@123
+      MYSQL_DATABASE: multi_tenant
+      MYSQL_USER: graymatics
+      MYSQL_PASSWORD: graymatics
+
+  # Algorithm
+  main-script:
+    depends_on: 
+      - db
+    image: graymatics1/hydrabad4
+    container_name: main_script
+    restart: unless-stopped
+    working_dir: /home/src/
+    networks:
+      - dev
+    volumes:
+      - /home/ubuntu/src
+    environment:
+      MYSQL_IP: $$(docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ubuntu-db-1)
+      MYSQL_DB: multi_tenant
+      SERVER_IP: $$(curl -s https://checkip.amazonaws.com)
+    entrypoint: /bin/bash
+
+  # yolov4:
+  #   image: graymatics1/yolov4
+  #   container_name: yolov4
+  #   command: /home/src/server/run.sh
+  #   restart: always
+  #   working_dir: /home/src/
+  #   networks:
+  #     - dev
+  #   runtime: nvidia
+
+  yolox:
+    image: graymatics1/yolox_s:v8
+    container_name: yolox_s_server
+    entrypoint: /opt/conda/bin/python3
+    command: yolox_s_server.py
+    restart: always
+    working_dir: /workspace/YOLOX/tools
+    networks:
+      - dev
+    runtime: nvidia
+    environment:
+      PORT: 5009
