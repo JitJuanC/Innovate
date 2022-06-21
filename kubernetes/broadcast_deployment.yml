@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: broadcast
-        image: graymatics1/broadcast:auto
+        image: repo/broadcast:auto
         resources:
           limits: 
             memory: 128Mi

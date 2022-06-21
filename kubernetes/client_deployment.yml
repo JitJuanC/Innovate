@@ -1,0 +1,60 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: my-pvc
+  namespace: sam
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: algo-deploy
+  namespace: sam
+  labels:
+    app: algo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: algo
+  template:
+    metadata:
+      labels:
+        app: algo
+    spec:
+      containers:
+        - name: pcount
+          image: repo/pcount:kv1
+          workingDir: /home/src/client
+          env:
+            - name: SERVICE
+              value: "tcp://yolo-handle-service:10002"
+            - name: STREAM
+              value: "http://broadcast-service:8090/feed0.ffm"
+          command: ["/bin/bash"]
+          args: ["/home/src/client/run.sh"]
+          volumeMounts:
+            - mountPath: /home/shares
+              name: algo-pv
+        - name: sociald
+          image: repo/sociald:kv1
+          workingDir: /home/src/client
+          env:
+            - name: SERVICE
+              value: "tcp://yolo-handle-service:10002"
+            - name: STREAM
+              value: "http://broadcast-service:8090/feed1.ffm"
+          command: ["/bin/bash"]
+          args: ["/home/src/client/run.sh"]
+          volumeMounts:
+            - mountPath: /home/shares
+              name: algo-pv
+      volumes:
+        - name: algo-pv
+          persistentVolumeClaim:
+            claimName: my-pvc
