@@ -43,7 +43,7 @@ if __name__=='__main__':
         star = cursor.fetchall()
         return star[0][0]
 
-    db = MySQLdb.connect('172.18.0.3', 'graymatics', 'graymatics', db='dbs')
+    db = MySQLdb.connect('172.18.0.3', 'username', 'password', db='dbs')
     cursor = db.cursor()
     target_date = '2021-10-07'
     cursor.execute(f"select cast(avg(f.stars) as decimal(10,1)), sum(p.intuitive), sum(p.volume), sum(p.comprehensive), \

@@ -11,8 +11,8 @@ def main():
     # if not exists, initialize the mysql table
     mysql_args = {
         "ip":'172.18.0.3',
-        "user":'graymatics',
-        "pwd":'graymatics',
+        "user":'username',
+        "pwd":'password',
         "db":"dbs",
 
         "table_feedback":"feedback",
@@ -25,7 +25,7 @@ def main():
             ['time','datetime'],
             ['mgs','varchar(45)']]
         }
-    # temi's data names
+    # data names
     data_names = ('feedback', 'alert')
     db = MySQLdb.connect(mysql_args['ip'], mysql_args['user'], mysql_args['pwd'], db=mysql_args['db'])
     cursor = db.cursor()
@@ -47,11 +47,11 @@ def main():
             db = MySQLdb.connect(mysql_args['ip'], mysql_args['user'], mysql_args['pwd'], db=mysql_args['db']) # Refresh the MySQL Connection
             cursor = db.cursor()
             ws_data = json.loads(ws_data) # convert str/bytes to json
-            uuid_temi = str(uuid.uuid4())
+            uuid_client = str(uuid.uuid4())
             now_time = datetime.now()
             requested = ws_data.get('request').lower()
 
-            # take action when there is data from temi which is in data_names
+            # take action when there is data from client which is in data_names
             if requested in data_names:
                 column = ','.join([f'{c[0]}' for c in mysql_args[f'column_{requested}']])
                 if requested == 'feedback':
@@ -67,18 +67,18 @@ def main():
                     unattended = 0 if features.find('unattended') == -1 else 1
                     transaction = 0 if features.find('transaction') == -1 else 1
 
-                    cmd = f"insert into {mysql_args[f'table_{requested}']} ({column}) values (\"{uuid_temi}\", \"{now_time}\", \
+                    cmd = f"insert into {mysql_args[f'table_{requested}']} ({column}) values (\"{uuid_client}\", \"{now_time}\", \
                         {int(ws_data.get('stars'))})"
                     cursor.execute(cmd)
-                    cursor.execute(f"insert into performance (id, intuitive, volume, comprehensive, directing) values (\"{uuid_temi}\", \
+                    cursor.execute(f"insert into performance (id, intuitive, volume, comprehensive, directing) values (\"{uuid_client}\", \
                         {intuitive}, {volume}, {comprehensive}, {directing})")
-                    cursor.execute(f"insert into features (id, video_call, show_location, unattended, transaction) values (\"{uuid_temi}\", \
+                    cursor.execute(f"insert into features (id, video_call, show_location, unattended, transaction) values (\"{uuid_client}\", \
                         {video_call}, {show_location}, {unattended}, {transaction})")
                     db.commit()
                 if requested == 'alert':
-                    data = {'data':{'time':time.time(), 'cam_name':'Temi_Robot', 'cam_id':'3', 'alert':'temi lift alert'}, 'algo':'temi'}
-                    send_ws('ntt', data)
-                    cmd = f"insert into {mysql_args[f'table_{requested}']} ({column}) values (\"{uuid_temi}\", \"{now_time}\", \
+                    data = {'data':{'time':time.time(), 'cam_name':'Robot Cam', 'cam_id':'3', 'alert':'lift alert'}, 'algo':'client'}
+                    send_ws('target_for_sending', data)
+                    cmd = f"insert into {mysql_args[f'table_{requested}']} ({column}) values (\"{uuid_client}\", \"{now_time}\", \
                         \"{str(ws_data.get('mgs'))}\")"
                     cursor.execute(cmd)
                     db.commit()
@@ -124,7 +124,7 @@ def main():
                                     # print('Sent', sending)
                         alarms.clear() # reset the alarms  
                 else: 
-                    print("DATA FROM TEMI: ", data)
+                    print("DATA FROM CLIENT: ", data)
                     print(type(data))
                     add_feedback(data)
         except websockets.exceptions.ConnectionClosed as e:
@@ -137,7 +137,7 @@ def main():
     async def handle(websocket, path): # different asynchronus function from send()
         try:
             async for data in websocket:
-                print("Received data from graymatics: " + data) # prints the data from client (sender)
+                print("Received data: " + data) # prints the data from client (sender)
                 converted_data = json.loads(data) # convert to dictionary format (json)
                 if converted_data.get('alert') not in alarms: # check the alert from the dictionary, if have - add to the alarm set
                     alarms.add(converted_data.get('alert'))

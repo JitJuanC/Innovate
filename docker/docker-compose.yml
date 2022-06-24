@@ -10,21 +10,21 @@ services:
     image: mysql:5.7
     volumes:
       - /home/ubuntu/server/mysql:/var/lib/mysql
-      - /home/ubuntu/graymatics_init_tables.sql:/docker-entrypoint-initdb.d/init.sql
+      - /home/ubuntu/table_init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: always
     networks: 
        - dev
     environment:
       MYSQL_ROOT_PASSWORD: MultiTenant@123
       MYSQL_DATABASE: multi_tenant
-      MYSQL_USER: graymatics
-      MYSQL_PASSWORD: graymatics
+      MYSQL_USER: username
+      MYSQL_PASSWORD: password
 
   # Algorithm
   main-script:
     depends_on: 
       - db
-    image: graymatics1/hydrabad4
+    image: repo/main
     container_name: main_script
     restart: unless-stopped
     working_dir: /home/src/
@@ -39,7 +39,7 @@ services:
     entrypoint: /bin/bash
 
   # yolov4:
-  #   image: graymatics1/yolov4
+  #   image: repo/yolov4
   #   container_name: yolov4
   #   command: /home/src/server/run.sh
   #   restart: always
@@ -49,7 +49,7 @@ services:
   #   runtime: nvidia
 
   yolox:
-    image: graymatics1/yolox_s:v8
+    image: repo/yolox_s:v8
     container_name: yolox_s_server
     entrypoint: /opt/conda/bin/python3
     command: yolox_s_server.py

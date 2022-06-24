@@ -5,8 +5,8 @@ def main():
     port = 5050
     host = 'localhost'
     connected = set()
-    ntt_ws = websockets.connect('ws://127.0.0.1:5051')
-    print(f"Server started for NTT --> instance: {ntt_ws}")
+    ws1 = websockets.connect('ws://127.0.0.1:5051')
+    print(f"Server started for COMPANY --> instance: {ws1}")
 
     # async def establish():
     #     async with websockets.connect('ws://127.0.0.1:5051') as ws:
@@ -21,7 +21,7 @@ def main():
         print(connected)
         try:
             async for data in websocket:
-                print("Received data from graymatics: " + data)
+                print("Received data: " + data)
                 for client in connected:
                     try:
                         await client.send(data)

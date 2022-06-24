@@ -7,7 +7,7 @@ import smtplib
 
 def send_email(targets, email_body, date): 
     message = MIMEMultipart() # Initialize all the email details
-    message["from"] = "Graymatics"
+    message["from"] = "My Company"
     message["to"] = ','.join([f'{target}' for target in targets])
     message["subject"] = f"Daily Feedback for TEMI Robot on {date}"
     message.attach(email_body)
@@ -22,7 +22,7 @@ def send_email(targets, email_body, date):
     with smtplib.SMTP(host = "smtp.gmail.com", port=587) as smtp:
         smtp.ehlo() # Hi SMTP server, Im here!
         smtp.starttls() # Start TLS (Encryption)
-        smtp.login("dbsgraymatics@gmail.com", "graymatics") # Username, Password
+        smtp.login("email_in_gmail@gmail.com", "gmail_password") # Username, Password
         smtp.send_message(message)
 
 def email_body(wall_text):
@@ -36,4 +36,4 @@ if __name__=='__main__':
     ---Write Text Here---
     """)
 
-    send_email(["dbsgraymatics@gmail.com", "dbs@graymatics.com"], text, datetime.now())
+    send_email(["target1@gmail.com", "target2@hotmmail.com"], text, datetime.now())

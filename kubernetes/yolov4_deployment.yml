@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: yolo-deployment
+  namespace: sam
   labels:
     app: yolo
 spec:
@@ -16,7 +17,7 @@ spec:
     spec:
       containers:
         - name: yolo
-          image: graymatics1/yolov4
+          image: repo/yolov4
           workingDir: /home/src/server
           command: ["/bin/sh"]
           args: ["run.sh"]
@@ -30,7 +31,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: yolo-service
-  namespace: graymatics
+  namespace: sam
 spec:
   selector:
     app: yolo
