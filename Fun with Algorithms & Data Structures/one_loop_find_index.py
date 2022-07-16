@@ -1,12 +1,13 @@
 """
-Finding index of the 2 numbers which sums up to a particular number within list of numbers in O(n), linear time complexity
+List, Indexing
 
+Finding index of the 2 numbers which sums up to a particular number within list of numbers in O(n), linear time complexity
 The list has to be sorted in order to make it possible with one loop.
 
-Input: list with numbers (Should be sorted or there is a method below to sort it as well; take note, sort() is O(n))
+Input: list with numbers (Should be sorted or there is a method below to sort it as well; take note, sort() is O(n log n))
 
 Output: Index of the 2 numbers(0:) - eg. "first index: 2 | second index: 5"
-Output(if pair not found): -1, -1 - - eg. "first index: -1 | second index: -1"
+Output(pair not found): -1, -1 - eg. "first index: -1 | second index: -1"
 """
 # list must be sorted
 def find_index_one_loop_sorted(num_list, target):
