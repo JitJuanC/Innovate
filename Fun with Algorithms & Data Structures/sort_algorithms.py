@@ -1,4 +1,5 @@
-"""Sort Algorithms
+"""
+Sort Algorithms
 
 A collection of sorting algorithms written from scratch. For practice and to find out the time complexity for each one.
 
