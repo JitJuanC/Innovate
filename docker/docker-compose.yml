@@ -15,8 +15,8 @@ services:
     networks: 
        - dev
     environment:
-      MYSQL_ROOT_PASSWORD: MultiTenant@123
-      MYSQL_DATABASE: multi_tenant
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: default_db
       MYSQL_USER: username
       MYSQL_PASSWORD: password
 
@@ -34,7 +34,7 @@ services:
       - /home/ubuntu/src
     environment:
       MYSQL_IP: $$(docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ubuntu-db-1)
-      MYSQL_DB: multi_tenant
+      MYSQL_DB: default_db
       SERVER_IP: $$(curl -s https://checkip.amazonaws.com)
     entrypoint: /bin/bash
 
@@ -51,7 +51,7 @@ services:
   yolox:
     image: repo/yolox_s:v8
     container_name: yolox_s_server
-    entrypoint: /opt/conda/bin/python3
+    entrypoint: python3
     command: yolox_s_server.py
     restart: always
     working_dir: /workspace/YOLOX/tools
