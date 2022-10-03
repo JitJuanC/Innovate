@@ -28,6 +28,7 @@ def find_index_one_loop_sorted(num_list, target):
     
 if __name__ == '__main__':
     # Target Number to find
+    target = 15
 
     # sorted
     input = [3, 5, 6, 9, 13, 20]
